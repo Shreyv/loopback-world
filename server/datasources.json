@@ -1,0 +1,8 @@
+{
+    "datasource": {
+        "name": "datasource",
+        "localStorage": "",
+        "file": "server/data/users.json",
+        "connector": "memory"
+    }
+}
