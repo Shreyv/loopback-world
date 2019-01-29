@@ -27,9 +27,7 @@ module.exports = function(User) {
         User.find({
             order: 'id DESC',
             limit: 1
-          },function(err,data){
-              console.log('****',err);
-              
+          },function(err,data){              
               cb(null,data);
           });
     }
