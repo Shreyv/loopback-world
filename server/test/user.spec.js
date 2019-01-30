@@ -4,6 +4,7 @@ describe('/user', function () {
     var server = require('../server')
     var request = require('supertest')(server);
     var assert = require('assert');
+    var i = 1;
 
     var app;
 
@@ -83,6 +84,55 @@ describe('/user', function () {
                 done();
             })
         })
+
+    })
+
+    var flag = true;
+    var counter = 1;
+    it('Retrieve all users and check the last user by latest and counter+1', function (done) {
+    async function checkNthUser () {
+        while(flag){
+              let resp = await request.get('/api/users/'+counter).send();
+              if(resp.body.latest.length == 0){
+                flag = false;
+              }
+              else{
+                counter = counter+1;
+              }
+              
+        }
+      }
+     
+    async function postUser(){
+        request.post('/api/users')
+        .send({name: 'check',email: 'check@gmail.com'}).expect(200)
+    }
+    
+   function checkLastUser(){
+    counter--;   
+    request.get('/api/users/'+counter).
+        end(function(err,res){
+            
+            var resp = res.body.latest[0];
+            request.get('/api/users/latest')
+            .send().expect(200).end(function(err,res){
+                assert.equal(res.body.latest[0].name,resp.name);
+                assert.equal(res.body.latest[0].email,resp.email);
+                done();
+            })
+        })
+    }
+    async function helper(){
+        //checks all users and stores the id in counter
+        await checkNthUser();
+        
+        // creates a user to be the last created
+        await postUser();
+        
+        //checks the last user by /latest api and /counter + 1 api
+        checkLastUser();
+    } 
+    helper(); 
 
     })
 
