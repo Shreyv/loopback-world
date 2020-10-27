@@ -1,6 +1,6 @@
 var EmailService = {};
 var API_KEY = 'API_KEY';
-var DOMAIN = 'sandbox7506262a89b54455b541c081b22f332e.mailgun.org';
+var DOMAIN = '';
 var mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN}); 
 
 
